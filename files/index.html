@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rutuparn Ranade — AI & Systems Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c14;
+    --surface: #0e1520;
+    --surface2: #131c2e;
+    --border: rgba(255,255,255,0.06);
+    --amber: #f5a623;
+    --amber-dim: rgba(245,166,35,0.15);
+    --amber-glow: rgba(245,166,35,0.4);
+    --cyan: #4dd9e8;
+    --cyan-dim: rgba(77,217,232,0.12);
+    --text: #e8edf5;
+    --text-muted: #7a8599;
+    --text-dim: #4a5568;
+    --red: #ff4d6d;
+    --green: #43d9a2;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── GRID TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(8,12,20,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--amber);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.4rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--amber); }
+
+  /* ── SECTION BASE ── */
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(ellipse, rgba(245,166,35,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-glow-2 {
+    position: absolute;
+    bottom: -15%;
+    right: -5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(77,217,232,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--amber-dim);
+    border: 1px solid rgba(245,166,35,0.3);
+    border-radius: 2px;
+    padding: 0.3rem 0.85rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--amber);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.6rem;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--amber);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.2rem;
+    color: var(--text);
+  }
+
+  .hero-name span {
+    color: var(--amber);
+    position: relative;
+  }
+
+  .hero-role {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--cyan);
+    margin-bottom: 1.6rem;
+    min-height: 1.4em;
+  }
+
+  .hero-role .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: var(--cyan);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink 0.8s step-end infinite;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .hero-bio {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 480px;
+    margin-bottom: 2.4rem;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--amber);
+    color: #0a0a0a;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.85rem 1.8rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: #fff;
+    box-shadow: 0 0 30px var(--amber-glow);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.85rem 1.8rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+    transform: translateY(-2px);
+  }
+
+  /* Hero Right — Stats */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+
+  .stat-card:hover { background: var(--surface2); }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--amber), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .stat-card:hover::before { opacity: 1; }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-pad { padding: 6rem 0; }
+
+  .sec-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.2rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .sec-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--amber);
+    letter-spacing: 0.15em;
+  }
+
+  .sec-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .sec-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-left: 1rem;
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--surface); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--text-muted);
+    margin-bottom: 1.2rem;
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .about-text strong { color: var(--text); }
+
+  .about-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .highlight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .highlight-item:hover {
+    border-color: rgba(245,166,35,0.3);
+    transform: translateX(4px);
+  }
+
+  .hi-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .hi-text strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.2rem;
+  }
+
+  .hi-text span {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .project-card {
+    background: var(--surface);
+    padding: 2rem;
+    position: relative;
+    transition: background 0.25s;
+    cursor: default;
+  }
+
+  .project-card:hover { background: var(--surface2); }
+
+  .project-card.featured {
+    grid-column: span 2;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .project-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    margin-right: 0.4rem;
+    margin-bottom: 0.4rem;
+    display: inline-block;
+  }
+
+  .tag-ml { background: rgba(245,166,35,0.12); color: var(--amber); }
+  .tag-sys { background: rgba(77,217,232,0.1); color: var(--cyan); }
+  .tag-fin { background: rgba(67,217,162,0.1); color: var(--green); }
+  .tag-hw { background: rgba(255,77,109,0.1); color: var(--red); }
+
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0.8rem 0 0.6rem;
+    line-height: 1.3;
+  }
+
+  .project-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+  }
+
+  .project-metrics {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .metric-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--amber);
+  }
+
+  .metric-key {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  .project-date {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── EXPERIENCE ── */
+  #experience { background: var(--surface); }
+
+  .exp-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-left: 1px solid var(--border);
+    margin-left: 1rem;
+  }
+
+  .exp-item {
+    padding: 0 0 2.5rem 2.5rem;
+    position: relative;
+  }
+
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 0.35rem;
+    width: 9px;
+    height: 9px;
+    background: var(--bg);
+    border: 2px solid var(--amber);
+    border-radius: 50%;
+    transition: background 0.2s;
+  }
+
+  .exp-item:hover::before { background: var(--amber); }
+
+  .exp-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .exp-org {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .exp-period {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    margin-left: auto;
+  }
+
+  .exp-role {
+    font-size: 0.85rem;
+    color: var(--cyan);
+    margin-bottom: 0.8rem;
+    font-style: italic;
+  }
+
+  .exp-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .exp-bullets li {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    padding-left: 1.2rem;
+    position: relative;
+    line-height: 1.65;
+  }
+
+  .exp-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--amber);
+    font-size: 0.75rem;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .skill-group {
+    background: var(--surface);
+    padding: 1.8rem;
+    transition: background 0.2s;
+  }
+
+  .skill-group:hover { background: var(--surface2); }
+
+  .skill-group-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.2rem;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .skill-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.7rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .skill-tag:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+    background: var(--amber-dim);
+  }
+
+  /* ── ACHIEVEMENTS ── */
+  .achieve-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .achieve-card {
+    background: var(--surface);
+    padding: 1.8rem;
+    transition: background 0.2s;
+  }
+
+  .achieve-card:hover { background: var(--surface2); }
+
+  .achieve-rank {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .achieve-detail {
+    font-size: 0.85rem;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+  }
+
+  .achieve-ctx {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--surface);
+    text-align: center;
+    padding: 7rem 0;
+  }
+
+  .contact-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .contact-pre {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--amber);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .contact-heading {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1.2rem;
+    line-height: 1.1;
+  }
+
+  .contact-sub {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 0.7rem 1.4rem;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(245,166,35,0.15);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    padding: 1.5rem 4rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.4rem; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-stats { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .project-card.featured { grid-column: span 1; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .sec-line { display: none; }
+    .projects-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">RR_PORTFOLIO</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">IIT Bombay · EE + CS Minor · 2024–2029</div>
+        <h1 class="hero-name">Rutuparn<br><span>Ranade</span></h1>
+        <div class="hero-role">
+          <span id="typewriter">ML &amp; Autonomous Systems Engineer</span><span class="cursor"></span>
+        </div>
+        <p class="hero-bio">
+          Building intelligent systems at the intersection of <strong>machine learning, autonomous robotics</strong>, and <strong>quantitative finance</strong>. 
+          AIR 847 in JEE Advanced among 1.8 lakh candidates. Currently researching swarm coordination at the College of Military Engineering.
+        </p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn-primary">↓ View Projects</a>
+          <a href="mailto:rutuparnranade@gmail.com" class="btn-ghost">Get in Touch</a>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-num">847</div>
+          <div class="stat-label">JEE Advanced AIR<br>out of 1.8L candidates</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">9.17</div>
+          <div class="stat-label">CPI at IIT Bombay<br>64 core credits</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">0.95</div>
+          <div class="stat-label">R² Score<br>LSTM Stock Predictor</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">79%</div>
+          <div class="stat-label">F1 Score<br>Wildlife Detection CV</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">100+</div>
+          <div class="stat-label">Campus Ambassadors<br>Mentored across India</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">0.019</div>
+          <div class="stat-label">Loss — CNN MNIST<br>600+ training iterations</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section-pad">
+  <div class="container">
+    <div class="sec-header">
+      <span class="sec-num">01 //</span>
+      <h2 class="sec-title">About</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="about-grid fade-up">
+      <div class="about-text">
+        <p>I'm a <strong>Dual Degree student (B.Tech + M.Tech) in Electrical Engineering</strong> at IIT Bombay, pursuing a Minor in Data Science & Computer Science. I sit at the intersection of machine learning, autonomous systems, and quantitative reasoning.</p>
+        <p>My academic focus spans <strong>control theory, signal processing, and applied ML</strong> — from FPGA-based parallel solvers to deep reinforcement learning for trading strategy optimization. I treat every project as engineering: measurable outcomes, clean implementations, reproducible results.</p>
+        <p>Outside the lab, I mentor 100+ campus ambassadors across India for E-Cell IIT Bombay, lead design initiatives for EESA reaching 1,400+ students, and contribute to autonomous airship research at SPART — building a track record that bridges technical depth with real-world impact.</p>
+      </div>
+      <div class="about-highlights">
+        <div class="highlight-item">
+          <div class="hi-icon">🔬</div>
+          <div class="hi-text">
+            <strong>Winter Research Intern — CME, Pune</strong>
+            <span>Swarm coordination & formation control for autonomous UGVs on live map interface. Dec 2025–Present.</span>
+          </div>
+        </div>
+        <div class="highlight-item">
+          <div class="hi-icon">✈️</div>
+          <div class="hi-text">
+            <strong>Solar Airship Engineer — SPART, IIT Bombay</strong>
+            <span>Implemented A* path-planning with weather-aware routing for autonomous solar-powered airship.</span>
+          </div>
+        </div>
+        <div class="highlight-item">
+          <div class="hi-icon">📊</div>
+          <div class="hi-text">
+            <strong>Quant & ML Practitioner</strong>
+            <span>Built LSTM stock predictors, RL-based trading agents, and BTC/USD backtesting pipelines.</span>
+          </div>
+        </div>
+        <div class="highlight-item">
+          <div class="hi-icon">🎨</div>
+          <div class="hi-text">
+            <strong>Design Leader — EESA & NSS IIT Bombay</strong>
+            <span>Selected from 80+ for Design Secretary; manages creative direction for 1,400+ student council.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section-pad">
+  <div class="container">
+    <div class="sec-header">
+      <span class="sec-num">02 //</span>
+      <h2 class="sec-title">Key Projects</h2>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="projects-grid fade-up">
+
+      <!-- FEATURED -->
+      <div class="project-card featured">
+        <span class="project-date">Dec 2025 – Present</span>
+        <span class="project-tag tag-sys">Autonomous Systems</span>
+        <span class="project-tag tag-ml">Swarm AI</span>
+        <div class="project-title">Swarm Coordination of Unmanned Ground Vehicles</div>
+        <p class="project-desc">
+          Research internship at College of Military Engineering, Pune. Engineered swarm formation and transformation logic enabling multi-UGV agents to achieve target formations with minimal movement cost. Built live map visualization that renders and optimizes shape-to-shape transitions in real time.
+        </p>
+        <div class="project-metrics">
+          <div class="metric">
+            <span class="metric-val">Real-time</span>
+            <span class="metric-key">Live Map Interface</span>
+          </div>
+          <div class="metric">
+            <span class="metric-val">Multi-agent</span>
+            <span class="metric-key">Swarm Formation Control</span>
+          </div>
+          <div class="metric">
+            <span class="metric-val">Military R&D</span>
+            <span class="metric-key">Research Context</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <span class="project-date">May–Jul 2025</span>
+        <span class="project-tag tag-fin">Quant Finance</span>
+        <span class="project-tag tag-ml">Deep RL</span>
+        <div class="project-title">RL-Optimized Stock Trading Strategy</div>
+        <p class="project-desc">
+          Trained a Deep Q-Network on historical price data. Fine-tuned risk/reward profile to achieve Risk of 0.0085 and Return of 0.3606. Benchmarked against LSTM baseline — RL agent outperformed on Sharpe-adjusted metrics.
+        </p>
+        <div class="project-metrics">
+          <div class="metric"><span class="metric-val">0.3606</span><span class="metric-key">Strategy Return</span></div>
+          <div class="metric"><span class="metric-val">0.0085</span><span class="metric-key">Risk Score</span></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <span class="project-date">May–Jul 2025</span>
+        <span class="project-tag tag-ml">ML</span>
+        <span class="project-tag tag-fin">Time-Series</span>
+        <div class="project-title">LSTM Stock Price Predictor</div>
+        <p class="project-desc">
+          Built an LSTM model predicting stock prices from user-specified tickers. Layered technical indicator analysis (RSI, MACD, Bollinger Bands) on top for interpretability. Achieved R² of 0.95 on holdout test sets.
+        </p>
+        <div class="project-metrics">
+          <div class="metric"><span class="metric-val">0.95</span><span class="metric-key">R² Score</span></div>
+          <div class="metric"><span class="metric-val">LSTM</span><span class="metric-key">Architecture</span></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <span class="project-date">Oct–Nov 2025</span>
+        <span class="project-tag tag-ml">Computer Vision</span>
+        <div class="project-title">Wildlife Detection via Image Processing</div>
+        <p class="project-desc">
+          Preprocessed 465 animal images with cropping, grid overlay, and grayscaling. Implemented HOG feature engineering + edge detection. Trained XGBoost, Random Forest, and CNN ensemble — achieving 79% F1-Score.
+        </p>
+        <div class="project-metrics">
+          <div class="metric"><span class="metric-val">79%</span><span class="metric-key">F1 Score</span></div>
+          <div class="metric"><span class="metric-val">465</span><span class="metric-key">Images Processed</span></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <span class="project-date">May–Jul 2025</span>
+        <span class="project-tag tag-ml">Deep Learning</span>
+        <div class="project-title">Handwritten Digit Recognition — CNN</div>
+        <p class="project-desc">
+          Implemented a ConvNet in PyTorch on MNIST. Used Adam optimizer with 600+ training iterations, reducing loss to 0.019. Model achieved near-SOTA accuracy with a compact architecture suitable for edge deployment.
+        </p>
+        <div class="project-metrics">
+          <div class="metric"><span class="metric-val">0.019</span><span class="metric-key">Final Loss</span></div>
+          <div class="metric"><span class="metric-val">600+</span><span class="metric-key">Iterations</span></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <span class="project-date">Nov 2024 – Present</span>
+        <span class="project-tag tag-sys">Autonomy</span>
+        <span class="project-tag tag-sys">Path Planning</span>
+        <div class="project-title">Solar-Powered Autonomous Airship — SPART</div>
+        <p class="project-desc">
+          Contributed to Project Saral 3.0: design, fabrication, and leakage testing of a solar airship. Implemented A* path-planning algorithm extended with wind/weather factor integration for realistic autonomous navigation.
+        </p>
+        <div class="project-metrics">
+          <div class="metric"><span class="metric-val">A*</span><span class="metric-key">Path Algorithm</span></div>
+          <div class="metric"><span class="metric-val">Weather-aware</span><span class="metric-key">Routing</span></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <span class="project-date">Oct–Nov 2025</span>
+        <span class="project-tag tag-hw">Hardware</span>
+        <span class="project-tag tag-hw">FPGA</span>
+        <div class="project-title">Parallel Kuramoto Oscillator Solver — FPGA</div>
+        <p class="project-desc">
+          Applied Euler's method to solve coupled differential equations for the Kuramoto oscillator model. Designed parallel bus architecture in Verilog on FPGA solving N simultaneous equations. Used Converged Phases to tackle the MaxCut problem on graph instances.
+        </p>
+        <div class="project-metrics">
+          <div class="metric"><span class="metric-val">FPGA</span><span class="metric-key">Platform</span></div>
+          <div class="metric"><span class="metric-val">Parallel</span><span class="metric-key">Architecture</span></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <span class="project-date">Jun–Aug 2025</span>
+        <span class="project-tag tag-fin">Quant</span>
+        <span class="project-tag tag-fin">Backtesting</span>
+        <div class="project-title">BTC/USD Trading Strategy Backtester</div>
+        <p class="project-desc">
+          Computed technical indicators (RSI, MACD, Bollinger Bands) and built a decision engine for long/short positioning. Backtested strategy over historical BTC/USD data to validate signal effectiveness before live deployment.
+        </p>
+        <div class="project-metrics">
+          <div class="metric"><span class="metric-val">RSI+MACD</span><span class="metric-key">Indicators</span></div>
+          <div class="metric"><span class="metric-val">BTC/USD</span><span class="metric-key">Market</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="section-pad">
+  <div class="container">
+    <div class="sec-header">
+      <span class="sec-num">03 //</span>
+      <h2 class="sec-title">Experience</h2>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="exp-timeline fade-up">
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <span class="exp-org">College of Military Engineering, Pune</span>
+          <span class="exp-period">Dec 2025 – Present</span>
+        </div>
+        <div class="exp-role">Winter Research Intern · Autonomous Systems Lab</div>
+        <ul class="exp-bullets">
+          <li>Engineered swarm formation and transformation logic for multi-UGV coordination on live map interface</li>
+          <li>Optimized shape-to-shape transitions minimizing total movement cost across agent swarms</li>
+          <li>Visualized real-time swarm trajectories to validate formation algorithms in simulation</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <span class="exp-org">E-Cell IIT Bombay</span>
+          <span class="exp-period">May 2025 – Present</span>
+        </div>
+        <div class="exp-role">Campus Ambassador Core Mentor</div>
+        <ul class="exp-bullets">
+          <li>Mentored 100+ campus ambassadors from 50+ colleges across India through 1-on-1 structured sessions</li>
+          <li>Led weekly workshops on entrepreneurship, engaging 20,000+ students in startup ecosystem activities</li>
+          <li>Designed tasks and created activities to sustain ambassador engagement and program effectiveness</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <span class="exp-org">EESA — Electrical Engineering Students' Association, IIT Bombay</span>
+          <span class="exp-period">Jun 2025 – Present</span>
+        </div>
+        <div class="exp-role">Design Secretary</div>
+        <ul class="exp-bullets">
+          <li>Selected from a pool of 80+ students to lead design for the 1,400+ member department council</li>
+          <li>Planned and executed Freshers' Party and Traditional Day including decoration and merch design</li>
+          <li>Designed official merch with 200+ orders; led Volunteers' t-shirt design for 1.5 Lakh INR budget program</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <span class="exp-org">SPART — Solar Powered Airship Research Team, IIT Bombay</span>
+          <span class="exp-period">Nov 2024 – Present</span>
+        </div>
+        <div class="exp-role">Junior Engineer · Autonomy & Path Planning</div>
+        <ul class="exp-bullets">
+          <li>Built Project Saral 3.0 airship from scratch: design, fabrication, control, and leakage testing</li>
+          <li>Implemented A* path-planning with wind-factor integration for weather-aware autonomous navigation</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <span class="exp-org">NSS IIT Bombay</span>
+          <span class="exp-period">May 2025 – Present</span>
+        </div>
+        <div class="exp-role">Activity Associate · Design, Environment & Sustainability</div>
+        <ul class="exp-bullets">
+          <li>Part of 4-member creative team managing social media design for 400+ volunteer organization</li>
+          <li>Designed posts and reels for Eco-friendly Ganesha Workshop and Seed Paper Flag Distribution (500+ volunteers)</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <span class="exp-org">Mood Indigo IIT Bombay</span>
+          <span class="exp-period">Nov 2024 – Jul 2025</span>
+        </div>
+        <div class="exp-role">Hospitality Organiser → CCP Associate</div>
+        <ul class="exp-bullets">
+          <li>Coordinated hospitality logistics for Asia's largest college cultural festival</li>
+          <li>Promoted to Corporate and Coordinator Programme role overseeing sponsor relations</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section-pad" style="background: var(--surface);">
+  <div class="container">
+    <div class="sec-header">
+      <span class="sec-num">04 //</span>
+      <h2 class="sec-title">Technical Skills</h2>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="skills-grid fade-up">
+      <div class="skill-group">
+        <div class="skill-group-title">Languages</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">VHDL</span>
+          <span class="skill-tag">Verilog</span>
+          <span class="skill-tag">MATLAB</span>
+          <span class="skill-tag">LaTeX</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">ML / AI</div>
+        <div class="skill-tags">
+          <span class="skill-tag">PyTorch</span>
+          <span class="skill-tag">TensorFlow</span>
+          <span class="skill-tag">scikit-learn</span>
+          <span class="skill-tag">XGBoost</span>
+          <span class="skill-tag">LSTM</span>
+          <span class="skill-tag">CNN</span>
+          <span class="skill-tag">Deep Q-Network</span>
+          <span class="skill-tag">NLTK</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Data & Visualization</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Numpy</span>
+          <span class="skill-tag">Pandas</span>
+          <span class="skill-tag">Matplotlib</span>
+          <span class="skill-tag">Seaborn</span>
+          <span class="skill-tag">Jupyter</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Hardware & EE</div>
+        <div class="skill-tags">
+          <span class="skill-tag">FPGA (Quartus)</span>
+          <span class="skill-tag">Arduino</span>
+          <span class="skill-tag">MATLAB Simulink</span>
+          <span class="skill-tag">LTSpice</span>
+          <span class="skill-tag">Autodesk Fusion</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Autonomy & Control</div>
+        <div class="skill-tags">
+          <span class="skill-tag">A* Path Planning</span>
+          <span class="skill-tag">PID Control</span>
+          <span class="skill-tag">LQR Control</span>
+          <span class="skill-tag">Swarm Coordination</span>
+          <span class="skill-tag">Qiskit</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Quant & Finance</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Technical Analysis</span>
+          <span class="skill-tag">Backtesting</span>
+          <span class="skill-tag">RSI / MACD</span>
+          <span class="skill-tag">Fundamental Analysis</span>
+          <span class="skill-tag">Zerodha Varsity</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="sec-header" style="margin-top: 4rem;">
+      <span class="sec-num">05 //</span>
+      <h2 class="sec-title">Achievements</h2>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="achieve-grid fade-up">
+      <div class="achieve-card">
+        <div class="achieve-rank">AIR 847</div>
+        <div class="achieve-detail">JEE Advanced 2024</div>
+        <div class="achieve-ctx">Top 0.05% of 1.8 lakh candidates</div>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-rank">2724</div>
+        <div class="achieve-detail">JEE Mains 2024</div>
+        <div class="achieve-ctx">100 Percentile in Physics · 1.42M candidates</div>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-rank">99.97%</div>
+        <div class="achieve-detail">MHT-CET 2024</div>
+        <div class="achieve-ctx">Top 0.03% among 1.3M+ candidates</div>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-rank">Top 1%</div>
+        <div class="achieve-detail">Chemistry Olympiad NSEC</div>
+        <div class="achieve-ctx">State level · 2023</div>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-rank">State 2nd</div>
+        <div class="achieve-detail">Maharashtra Talent Search (MTSE)</div>
+        <div class="achieve-ctx">Class 9 category · 2022</div>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-rank">9.17</div>
+        <div class="achieve-detail">CPI — IIT Bombay</div>
+        <div class="achieve-ctx">64 Core Credits · 2024–2025</div>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-rank">N4 / N5</div>
+        <div class="achieve-detail">Japanese Proficiency (JLPT)</div>
+        <div class="achieve-ctx">Japan Foundation certified</div>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-rank">1st Prize</div>
+        <div class="achieve-detail">Hindi Elocution (56th & 58th)</div>
+        <div class="achieve-ctx">Inter-State competition · 60+ participants</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner fade-up">
+      <div class="contact-pre">// Let's build something</div>
+      <h2 class="contact-heading">Open to Research,<br>Internships & Collabs</h2>
+      <p class="contact-sub">
+        Whether it's autonomous systems, ML research, quant finance, or an ambitious side project — I'd love to connect.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:rutuparnranade@gmail.com" class="contact-link">✉ Email</a>
+        <a href="https://www.linkedin.com/in/rutuparnranade-95623b340" target="_blank" class="contact-link">↗ LinkedIn</a>
+        <a href="https://www.iitb.ac.in" target="_blank" class="contact-link">🎓 IIT Bombay</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>RUTUPARN MANDAR RANADE · EE DUAL DEGREE · IIT BOMBAY 2029</p>
+  <p>BUILT WITH HTML · CSS · JS · NO FRAMEWORKS NEEDED</p>
+</footer>
+
+<script>
+// Typewriter
+const roles = [
+  'ML & Autonomous Systems Engineer',
+  'Quant & Algorithmic Researcher',
+  'Computer Vision Practitioner',
+  'FPGA & Embedded Systems Dev',
+  'Swarm Robotics Researcher'
+];
+let ri = 0, ci = 0, deleting = false;
+const tw = document.getElementById('typewriter');
+
+function type() {
+  const current = roles[ri];
+  if (!deleting) {
+    tw.textContent = current.slice(0, ci + 1);
+    ci++;
+    if (ci === current.length) { deleting = true; setTimeout(type, 2000); return; }
+  } else {
+    tw.textContent = current.slice(0, ci - 1);
+    ci--;
+    if (ci === 0) { deleting = false; ri = (ri + 1) % roles.length; }
+  }
+  setTimeout(type, deleting ? 40 : 70);
+}
+type();
+
+// Scroll fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
